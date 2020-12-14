@@ -4,7 +4,7 @@ tags: [Windows, Active Directory]
 categories: Active Directory
 ---
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/enum.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/enum.jpeg)
 
 # Considerações Iniciais
 
@@ -63,3 +63,100 @@ O comando para enumerarmos todos os Domains Admins é:
 `Get-NetGroupMember "Domain Admins"`
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/da.png)
+
+## Enumeração dos Shares
+
+Também podemos verificar todos os shares disponíveis no AD, pastas que teremos acesso.
+
+`Invoke-ShareFinder`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/share.png)
+
+## Enumeração de ACLs
+
+ACLs são as permissões que eles tem dentro do AD, no caso cada Objeto
+
+`Get-ObjectAcl -SamAccountName "Domain Admins"`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/acl1.png)
+
+Assim verificamos todas as ACLS de todos os grupos
+
+`Get-ObjectAcl -SamAccountName "Domain Admins" -ResolveGUIDs`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/acl2.png)
+
+## Enumerçação dos OUs 
+
+`Get-NetOU select | name`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/ou.png)
+
+## Enumeração dos Trusts do Domain em que estou
+
+A ideia agora é enumerarmos os trusts que nosso domínio tem no FOREST
+
+`Get-NetDomainTrust`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/trust.png)
+
+Com o `Get-NetForestDomain` nós verificamos todos os domínios no corrente forest, 
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/trus_domaint.png)
+
+Com o comando `Get-NetForestTrust` nós verificamos os trusts do nosso forest
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/trust2.png)
+
+Isso é importante pq com esse trust bidirecional nós podemos enumerar o outro domínio também (fora do nosso) no caso o que apareceu ali no comando acima
+
+`Get-NetComputer -Domain dominio_que_aparece.local | select name`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/trust3.png)
+
+Essas são as máquinas acessíveis em outro forest através do trust que temos no nosso domain! Interessante!
+
+## Enumeração de USER HUNTING
+
+Com ele verificamos se em alguma máquina no domínio nós tem local admin access (MUITO BARULHENTO)
+
+`Find-LocalAdminAccess`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/admin.png)
+
+Aqui não deu saida por que não tenho acesso administrativo em nenhuma máquina com meu usuário
+
+Outra função muito importante é a Invoke-UserHunter, ela faz a mesma coisa que a Find-LocalAdminAccess
+
+`Invoke-UserHunter`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/admin1.png)
+
+Aqui não deu saida por que não tenho acesso administrativo em nenhuma máquina com meu usuário
+
+# Concluindo
+
+Uma boa enumeração sempre é de extrema importância em qualquer ambiente que nos deparamos. Ela não termina por aqui, tem muito mais a ser explorado ainda, contudo para uma análize inicial.
+
+## Resumindo
+
+Resumindo o que foi feito, primeiro devemos ter a ferramenta PowerView (https://github.com/PowerShellMafia/PowerSploit/blob/master/Recon/PowerView.ps1), para podermos realizar a enumeração.
+
+Comandos utilizados.
+
+`Get-NetUser | select Name`
+`Get-NetGroup | select Name`
+`Get-NetComputer | select Name`
+`Get-NetGroupMember "Domain Admins"`
+`Invoke-ShareFinder`
+`Get-ObjectAcl -SamAccountName "Domain Admins"`
+`Get-ObjectAcl -SamAccountName "Domain Admins" -ResolveGUIDs`
+`Get-NetOU select | name`
+`Get-NetDomainTrust`
+`Get-NetForestDomain`
+`Get-NetForestTrust`
+`Get-NetComputer -Domain dominio_que_aparece.local | select name`
+`Find-LocalAdminAccess`
+`Invoke-UserHunter`
+
+Agora vamos para a enumeração de servidores MSSQL
