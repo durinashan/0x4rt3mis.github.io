@@ -1,0 +1,87 @@
+title:
+  archive: Arquivo
+  category: Categoria
+  tag: Tag
+  archives: Posts
+  categories: Categorias
+  tags: Tags
+  about: Sobre
+  access: Acesso
+
+author: Autor
+
+menu:
+  home: Home
+  archives: Posts
+  categories: Categorias
+  tags: Tags
+  about: Sobre
+  search: Pesquisa
+  access: Acesso
+
+sidebar:
+  overview: Visão geral
+  toc: Tabela de conteúdo
+
+post:
+  sticky: Sticky
+  posted: Postado em
+  modified: Updated at
+  in: Em
+  read_more: Leia mais
+  untitled: Sem título
+  toc_empty: Este post não possui tabela de conteúdo
+  visitors: Visitantes
+  wordcount: Words count in article
+  min2read: "Leia em (min): "
+  copyright:
+    author: Post author
+    link: Post link
+    license_title: Copyright Notice
+    license_content: 'All articles in this blog are licensed under
+      <a href="%s" rel="external nofollow" target="_blank">%s</a> unless stating additionally.'
+
+page:
+  totally: Totalmente
+  tags: tags
+
+footer:
+  powered: "Feito com %s"
+  theme: Tema
+
+counter:
+  tag_cloud:
+    zero: Sem tags
+    one: 1 tag somente
+    other: "%d tags no total! Tag pra caralho"
+
+  categories:
+    zero: Sem categoria
+    one: 1 categoria somente
+    other: "%d categorias no total! É muita categoria!"
+
+  archive_posts:
+    zero: Sem posts.
+    one: 1 post.
+    other: "%d posts no total."
+
+state:
+  posts: Posts
+  pages: Páginas
+  tags: Tags
+  categories: Categorias
+
+cheers:
+  um: Opa!
+  ok: OK
+  nice: Bom
+  good: Muito Bom
+  great: Ótimo
+  excellent: Excelente
+
+keep_on: Excelente.
+
+symbol:
+  comma: '. '
+  period: ', '
+  colon: ':'
