@@ -24,15 +24,15 @@ Que está "explicado" aqui:
 
 Passo 1 -> O cliente solicita um TGT para o servidor do kerberos, o servidor checa o time stamp
 
-Passo 2 -> o kdc mando um TGT, Ticket Grant Ticket, um ticket que garante acesso para um ticket que vai ser o TGS, ele é encriptado, assinado pelo hash do krbtgt (por isso quando pegamos o hash do krbtgt conseguimos controle sobre o AD)
+Passo 2 -> o KDC (Key Distribution Center) manda um TGT, Ticket Grant Ticket, um ticket que garante acesso para um ticket que vai ser o TGS, ele é encriptado, assinado pelo hash do krbtgt (por isso quando pegamos o hash do krbtgt conseguimos controle sobre o AD)
 
 Passo 3 -> O cliente manda o TGT de volta para o DC, para provar que o cliente tem um domain user logged in vaĺido. Me da um TGS já que sou eu mesmo, sou válido para todo o AD.
 
-Passo 4 -> O kdc encripta o TGT, a unica validação que ele faz é se ele pode desincriptar o TGT com o hash do kerberos, então aqui é vulnerável, uma vez que conseguimos forjar um ticket qualquer com o hash do krbtgt podemos nos passar por qualquer um, pq ele vai validar o TGS
+Passo 4 -> O KDC encripta o TGT, a unica validação que ele faz é se ele pode desincriptar o TGT com o hash do kerberos, então aqui é vulnerável, uma vez que conseguimos forjar um ticket qualquer com o hash do krbtgt podemos nos passar por qualquer um, pq ele vai validar o TGS e nos dar acesso a qualquer servidor/serviço que esteja dentro do AD!
 
-Passo 5 -> o usuário se conecta ao serviço que ele requisitou, enviando o TGS
+Passo 5 -> o usuário se conecta ao serviço que ele requisitou, enviando o TGS que já foi validado
 
-Passo 6 -> Ele fornece a autenticação
+Passo 6 -> Ele fornece a autenticação, e da acesso ao serviço requisitado pelo cliente
 
 O que me espanta mais é descobrir que `TODOS` os passos são vulneráveis e passíveis de algum tipo de exploração.
 
