@@ -82,8 +82,30 @@ Agora quebramos a senha
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/spn5.png)
 
-### Unconstrained Delegation
+Esse foi o ataque conhecido como `Kerberoast`, agora vamos para um que é mais complexo que é o Delegation
 
+### Delegation
+
+A principal ideia desse ataque é entender a reutilização de credenciais que o Kerberos permite realizar.
+
+Kerberos Delegation permite a reutilização de credenciais para acessar recursos em diferentes hosts, isso mesmo, reutilizar o ticket. Isso é muito útil quando falamos de serviços de diversas camadas ou aplicações onde o Double Hop do Kerberos é necessário, por exemplo, temos a situação que um usuário se autentica a um servidor web e o servidor web por sua vez faz a requisição para um banco de dados, o servidor web consegue simplesmente  acessar recursos (alguns) na database como se fosse o usuário e não como sendo o web server service account. E assim tendo o acesso que ele precisa ter no servidor remoto, percebe-se que é necessário o trusted for delegation para se realizar essa requisição como usuário.
+
+Confuso ainda? Vamos tentar explicar melhor...
+
+Mas, por que diabos isso foi implementado?
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/diag.png)
+
+1) Usuário da suas credenciais para o Domain Controler
+2) O DC o devolve um TGT.
+3) O usuário requisita o TGS para o servidor web.
+4) O DC provê o TGS
+5) O usuário manda o TGT e o TGS do database server para o DC.
+6) O servidor web (service account) se conecta à database como se usuário fosse.
+
+Esse é o procedimento que sempre é feito quando nos autentiacamos no servidor
+
+### Unconstrained Delegation
 
 ### Constrained Delegation
 
