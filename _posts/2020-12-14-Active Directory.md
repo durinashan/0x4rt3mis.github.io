@@ -1,7 +1,7 @@
 ---
 title: "Active Directory - Introdução"
 tags: [Windows, Active Directory]
-categories: Active Directory
+categories: ActiveDirectory
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-intro/active.png)

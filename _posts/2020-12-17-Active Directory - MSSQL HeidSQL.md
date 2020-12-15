@@ -1,7 +1,7 @@
 ---
 title: "Active Directory - HeidiSQL"
 tags: [Windows, Active Directory]
-categories: "ActiveDirectory"
+categories: ActiveDirectory
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/heidisql.png)
