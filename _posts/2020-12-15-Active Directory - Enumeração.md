@@ -1,10 +1,10 @@
 ---
 title: "Active Directory - Enumeração"
 tags: [Windows, Active Directory]
-categories: Active Directory
+categories: "Active Directory"
 ---
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/enum.jpeg)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/enum.jpeg.png)
 
 # Considerações Iniciais
 
@@ -14,7 +14,7 @@ A ferramenta que utilizarei para essa seção é o PowerView.ps1, um script escr
 
 Link para download do Script
 
-https://github.com/PowerShellMafia/PowerSploit/blob/master/Recon/PowerView.ps1
+[PowerView](https://github.com/PowerShellMafia/PowerSploit/blob/master/Recon/PowerView.ps1)
 
 E claro, obviamente, esconderei todas as menções para qual ambiente estou realizando a enumeração, aqui é apenas para fins didáticos!
 

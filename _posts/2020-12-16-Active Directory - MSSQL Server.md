@@ -1,7 +1,7 @@
 ---
 title: "Active Directory - Enumeração MSSQL"
 tags: [Windows, Active Directory]
-categories: Active Directory
+categories: "Active Directory"
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/mssql-server.png)
@@ -12,17 +12,11 @@ Agora vamos iniciar a enumeração do MSSQL Server desse AD, todo AD vai ter um 
 
 A ferramenta que utilizarei para essa seção é o PowerUpSql.ps1, um script escrito em PowerShell que possibilita a enumeração rápida e precisa do servidor SQL de um AD.
 
-Link para download do Script
-
-https://github.com/PowerShellMafia/PowerSploit/blob/master/Recon/PowerView.ps1
-
-E claro, obviamente, esconderei todas as menções para qual ambiente estou realizando a enumeração, aqui é apenas para fins didáticos!
-
 LEIAM O POST DE REFERÊNCIA, MUITO IMPORTANTE PARA A COMPREENSÃO DO QUE SERÁ EXECUTADO AQUI
 
 *Referência:*
 
-https://blog.netspi.com/powerupsql-powershell-toolkit-attacking-sql-server/
+[Link 1](https://blog.netspi.com/powerupsql-powershell-toolkit-attacking-sql-server/)
 
 # Enumeração de Servidores SQL
 
@@ -34,7 +28,7 @@ Vamos lá
 
 Ferramenta utilizada PowerUpSql.ps1
 
-https://github.com/NetSPI/PowerUpSQL/blob/master/PowerUpSQL.ps1
+[PowerUpSQL](https://github.com/NetSPI/PowerUpSQL/blob/master/PowerUpSQL.ps1)
 
 Listando todos os SQL do Laboratório que estão com SPN (Service Principal Name) habilitados
 
@@ -78,15 +72,15 @@ Agora vamos pegar um reverse shell nela!
 
 Iremos utilizar o `Invoke-PowerShellTCP.ps1` do Nishang
 
-https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellTcp.ps1
+[PowerShellTCP](https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellTcp.ps1)
 
 O `HFS` para hospedar nosso servidor web onde o servidor remoto irá fazer as requisições
 
-https://www.rejetto.com/hfs/
+[HFS](https://www.rejetto.com/hfs/)
 
 E o `powercat` para receber a conexão reversa
 
-https://github.com/besimorhino/powercat/blob/master/powercat.ps1
+[PowerCat](https://github.com/besimorhino/powercat/blob/master/powercat.ps1)
 
 Setamos o powercat na porta 443 para receber a conexão reversa
 
