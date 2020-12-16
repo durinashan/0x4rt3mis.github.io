@@ -43,7 +43,7 @@ $link-decoration-hover-color  : $black-deep;
 $border-color                 : $black-deep;
 
 // Background color for 2f343 <body>
-$body-bg-color                : #838080c2;;
+$body-bg-color                : #555555;;
 
 // Selection
 $selection-bg                 : $blue-deep;
@@ -126,14 +126,14 @@ $zindex-5       : 1050;
 // Table
 // --------------------------------------------------
 $table-width                    : 100%;
-$table-border-color             : $black-deep;
+$table-border-color             : $gray-lighter;
 $table-font-size                : 14px;
 $table-content-alignment        : left;
 $table-content-vertical         : middle;
 $table-th-font-weight           : 700;
 $table-cell-padding             : 8px;
 $table-cell-border-right-color  : $gainsboro;
-$table-cell-border-bottom-color : $black-deep;
+$table-cell-border-bottom-color : $gray-lighter;
 $table-row-odd-bg-color         : #2c2727;
 $table-row-hover-bg-color       : $whitesmoke;
 
