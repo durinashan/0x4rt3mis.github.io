@@ -164,6 +164,64 @@ Esse é o Unconstrained Delegation, temos acesso praticamente total ao servidor.
 
 A microsoft verificou que isso era muito perigoso (e com razão), ai implementou outro tipo de Delegation, a Constrained, que limita quais acessos o SPN vai ter na máquina.
 
-
 ### Constrained Delegation
 
+Bom, verificando que isso era perigoso deixar habilitado o Unconstrained, a Microsoft criou o Constrained Delegation, onde apenas alguns serviços são disponibilizados, não o  acesso à máquina como era no Unconstrained. Aqui no caso um usuário específico tera permissões diretas na máquinas.
+
+Verificamos que o usuário dbservice tem permissões de `AllowedToDelegate` que são necessárias para o Constrained Delegation (Através do BloodHound, que será trabalhado depois)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained3.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained4.png)
+
+Para verificarmos quais usuário estão com o Constrained Habilitado em quais Máquinas devemos utilizar o `PowerView.ps1` so que agora em sua versão `Dev`
+
+[PowerView-Dev.ps1](https://github.com/lucky-luk3/ActiveDirectory/blob/master/PowerView-Dev.ps1)
+
+`Get-DomainUser -TrustedToAuth`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained1.png)
+
+#### Explorando o Constrained Delegation
+
+Uma vez que temos o constrained habilitado, e sabemos que o usuário `dbservice` nessa caso tem essas permissões, vamos iniciar a exploração.
+
+1º Verificamos que realmente não tem acesso à máquina onde o dbservice tem o constrained
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained5.png)
+
+2º Perguntamos ao KDC pelo TGT do dbservice
+
+Não irei demonstrar aqui como fazemos a captura do hash NTLM do usuário, isso fica pro post a respeito do `Mimikatz`
+
+Para isso vamos utilizar o `kekeo`
+
+[Kekeo](https://github.com/gentilkiwi/kekeo)
+
+`tgt::ask /user:dbservice /domain:DOMINIO.LOCAL /ntlm:HASH.NTLM.DBSERVICE /ticket:dbservice.kirbi`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained6.png)
+
+3º Gerar o TGS para os serviços que queremos explorar
+
+Agora é gerar o TGS para os serviços, o serviço que está "vulnerável" é o TIME mas podemos gerar tickets também para o cifs, para podermos acessar a partição dele
+
+`tgs::s4u /tgt:TGT_dbservice.kirbi /user:Administrator@DOMÍNIO /service:time/MÁQUINA.LOCAL|cifs/MÁQUINA.local`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained7.png)
+
+Pronto, foram criados os tickets para o serviço TIME e para o CIFS, sendo assim agora vamos injetar eles na seção
+
+4º Injetar os tickets na seção
+
+`Invoke-Mimikatz -Command '"kerberos::ptt TICKET_GERADO"'`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained8.png)
+
+5º Acessar o share da máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained9.png)
+
+Pronto, essas foram as principais vulnerabilidades que podemos explorar dessa maneira.
