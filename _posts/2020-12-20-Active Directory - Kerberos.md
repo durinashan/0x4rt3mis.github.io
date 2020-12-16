@@ -97,15 +97,73 @@ Mas, por que diabos isso foi implementado?
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/diag.png)
 
 1) Usuário da suas credenciais para o Domain Controler
+
 2) O DC o devolve um TGT.
+
 3) O usuário requisita o TGS para o servidor web.
-4) O DC provê o TGS
+
+4) O DC provê o TGS.
+
 5) O usuário manda o TGT e o TGS do database server para o DC.
+
 6) O servidor web (service account) se conecta à database como se usuário fosse.
 
-Esse é o procedimento que sempre é feito quando nos autentiacamos no servidor
+Esse é o procedimento que sempre é feito quando nos autentiacamos no servidor. A ideia da exploração dessas fases é sempre o `IMPERSONIFICATION`, você se passar pelo usuário pra obter os acessos que teoricamente ele tem nas outras máquinas.
+
+Temos dois tipos de Delegation, o Unconstrained e o Constrained, vamos agora passar pra explicação de cada um deles.
 
 ### Unconstrained Delegation
+
+Os primeiros 4 passos, do diagrama anterior, são básicos, sempre vai ter, que é a criação/requisição do TGT e do TGS.
+
+Como o Web Server tem Unconstrained permission, o DC coloca o TGS junto com o TGT (passo número 4 e 5 do diagrama anterior), o Web Server, que tem o unconstrained habilitado extrai o TGT do token e se autentica a quem ele quiser como o user que enviou
+
+Podemos utilizar para escalação de privilégio, mas como? Se um Domain Admin se conectar a uma máqunina que tenha o Unconstrained Delegation habilitado, ele gerará um ticket na seção e nós poderemos extrair ele e reutilizar! Sim, reutilizar o ticket da seção na nossa seção, e sendo assim ter acesso à locais onde normalmente não teríamos.
+
+#### Verificando máquinas com `Unconstrained Delegation` habilitado
+
+Para verificarmos quais máquina estão com o Unconstrained Delegation habilitado, devemos recorrer ao `PowerView.ps1` com o comando
+
+`Get-NetComputer -Unconstrained`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/UNC.png)
+
+Aqui no caso eu escondi o nome das máquinas, e coloquei como sendo a ABC-UNC a máquina com o Unconstrained habilitado
+
+Assim verificamos as máquinas que possuem, o DC sempre vai ter, é nativo dele essa permissão.
+
+#### Explorando Unconstrained Delegation
+
+Para podermos explorar isso, devemos ter acesso a essa máquina, e acesso Administrativo, uma vez que iremos utilizar o `Mimikatz` para realizar a extração do ticket
+
+Ao verificarmos a máquina que tem isso, e com acesso de administrator nela, exportamos os tickets
+
+`Invoke-Mimikatz -Command '"privilege::debug" "token::elevate" "sekurlsa::tickets /export"'`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/unc1.png)
+
+Verificamos os tickets que foram exportados dentro da pasta e lá vemos que temos um que é de `Administrator` de outra máquina
+
+ABC-ADMINPROD1 (Logicamente mudei os nomes pra não expor o servidor que estou fazendo isso)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/unc2.png)
+
+#### Pass-The-Ticket
+
+Agora realizamos o Pass-The-Ticket e reinjetamos esse ticket em nossa seção, tendo assim acesso ao servidor como Admin
+
+`Invoke-Mimikatz -Command '"kerberos::ptt TICKET_QUE_FOI_VISTO"'`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/unc3.png)
+
+Pronto, ticket "reutilizado", agora temos acesso ao servidor normalmente
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/unc4.png)
+
+Esse é o Unconstrained Delegation, temos acesso praticamente total ao servidor.
+
+A microsoft verificou que isso era muito perigoso (e com razão), ai implementou outro tipo de Delegation, a Constrained, que limita quais acessos o SPN vai ter na máquina.
+
 
 ### Constrained Delegation
 
