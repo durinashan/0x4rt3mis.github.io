@@ -421,7 +421,7 @@ wildfire:
   wilddog: # your wilddog config goes here ↓
     siteId:
   # other configs
-  theme: forest # or dark
+  theme: neutral # forest, neutral, default or dark
   locale: pt-BR # or other locales, e.g. zh-CN
   defaultAvatarURL: 
 # Any question? 
