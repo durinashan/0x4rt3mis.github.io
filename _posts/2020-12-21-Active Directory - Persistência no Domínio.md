@@ -16,7 +16,7 @@ Aqui vamos abordar duas técnicas muito utilizadas quando se fala de persistênc
 
 Com o ataque de DCSync vamos ter acessso ao hash do Administrator da DC e consequentemetne a máquina através do PTH
 
-A ideia é parecida com a do Constrained Delegation, só que vamos gerar tickets para o LDAP
+A ideia é parecida com a do Constrained Delegation, só que vamos gerar tickets para o LDAP e através desse ticket gerado pegar o hash do administrator!
 
 Geramos o ticket para LDAP e injetamos ele
 
@@ -48,3 +48,4 @@ Esse foi o ataque de `DCSync`, a partir do Constrained delegation conseguimos ge
 ## Skeleton Key
 
 O próximo ataque é chamado de `Skeleton Key`, ele tem esse nome por que vai nos permitir acessar qualquer máquina do domínio com uma senha mestre, a partir do momento que tomamos o controle do DC.
+
