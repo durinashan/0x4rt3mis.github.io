@@ -49,3 +49,21 @@ Esse foi o ataque de `DCSync`, a partir do Constrained delegation conseguimos ge
 
 O próximo ataque é chamado de `Skeleton Key`, ele tem esse nome por que vai nos permitir acessar qualquer máquina do domínio com uma senha mestre, a partir do momento que tomamos o controle do DC.
 
+Note que aqui é necessário já estar dentro da máquina, então executando esse ataque após um DCSync, por exemplo
+
+Após ter tomado o controle do DC, com um shell reverso mesmo.
+
+"Baixamos" o mimikatz para a máquina `TEM QUE SER O EXECUTÁVEL` e executamos o ataque
+
+```
+privilege::debug
+misc::skeleton
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/enc.png)
+
+Pronto! Feito! Agora acessamos qualquer máquina desse domínio com a credencial `mimikatz`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/enc1.png)
+
+É importante ressaltar que esse ataque só pode ser feito uma vez, então caso quando você tente fazer dê erro, pode ser que alguém já tenha realizado nele no domínio.
