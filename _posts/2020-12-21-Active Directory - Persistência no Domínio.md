@@ -12,7 +12,7 @@ Aqui vamos abordar duas técnicas muito utilizadas quando se fala de persistênc
 
 É importante notar que devemos ter acesso do Domain Controller pra realizar esses ataques, uma vez que estão atrelados à pós-exploração.
 
-## DCSYnc
+# DCSYnc
 
 Com o ataque de DCSync vamos ter acessso ao hash do Administrator da DC e consequentemetne a máquina através do PTH
 
@@ -45,7 +45,7 @@ Enter-PSSession -ComputerName dc
 
 Esse foi o ataque de `DCSync`, a partir do Constrained delegation conseguimos gerar tickets para o LDAP e sendo assim extrair o hash ntlm do administrator do DC!
 
-## Skeleton Key
+# Skeleton Key
 
 O próximo ataque é chamado de `Skeleton Key`, ele tem esse nome por que vai nos permitir acessar qualquer máquina do domínio com uma senha mestre, a partir do momento que tomamos o controle do DC.
 

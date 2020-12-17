@@ -40,7 +40,7 @@ O que me espanta mais é descobrir que `TODOS` os passos são vulneráveis e pas
 
 Simmmmm, isso mesmo, todos os passos são passíveis de algum tipo de ataque, aqui vamos tentar explicar e explorar eles, logicamente não vai clarificar 100% dos conceitos, mas novamente, segue como base para estudos futuros, e por favor, caso tenha sugestões ou ache algum erro nas minhas explicações, me avise!
 
-### Kerberoast
+# Kerberoast
 
 Esse "ataque" explora os passos `3` e `4`
 
@@ -84,7 +84,7 @@ Agora quebramos a senha
 
 Esse foi o ataque conhecido como `Kerberoast`, agora vamos para um que é mais complexo que é o Delegation
 
-### Delegation
+# Delegation
 
 A principal ideia desse ataque é entender a reutilização de credenciais que o Kerberos permite realizar.
 
@@ -112,7 +112,7 @@ Esse é o procedimento que sempre é feito quando nos autentiacamos no servidor.
 
 Temos dois tipos de Delegation, o Unconstrained e o Constrained, vamos agora passar pra explicação de cada um deles.
 
-### Unconstrained Delegation
+# Unconstrained Delegation
 
 Os primeiros 4 passos, do diagrama anterior, são básicos, sempre vai ter, que é a criação/requisição do TGT e do TGS.
 
@@ -120,7 +120,7 @@ Como o Web Server tem Unconstrained permission, o DC coloca o TGS junto com o TG
 
 Podemos utilizar para escalação de privilégio, mas como? Se um Domain Admin se conectar a uma máqunina que tenha o Unconstrained Delegation habilitado, ele gerará um ticket na seção e nós poderemos extrair ele e reutilizar! Sim, reutilizar o ticket da seção na nossa seção, e sendo assim ter acesso à locais onde normalmente não teríamos.
 
-#### Verificando máquinas com `Unconstrained Delegation` habilitado
+## Verificando máquinas com `Unconstrained Delegation` habilitado
 
 Para verificarmos quais máquina estão com o Unconstrained Delegation habilitado, devemos recorrer ao `PowerView.ps1` com o comando
 
@@ -132,7 +132,7 @@ Aqui no caso eu escondi o nome das máquinas, e coloquei como sendo a ABC-UNC a 
 
 Assim verificamos as máquinas que possuem, o DC sempre vai ter, é nativo dele essa permissão.
 
-#### Explorando Unconstrained Delegation
+## Explorando Unconstrained Delegation
 
 Para podermos explorar isso, devemos ter acesso a essa máquina, e acesso Administrativo, uma vez que iremos utilizar o `Mimikatz` para realizar a extração do ticket
 
@@ -148,7 +148,7 @@ ABC-ADMINPROD1 (Logicamente mudei os nomes pra não expor o servidor que estou f
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/unc2.png)
 
-#### Pass-The-Ticket
+## Pass-The-Ticket
 
 Agora realizamos o Pass-The-Ticket e reinjetamos esse ticket em nossa seção, tendo assim acesso ao servidor como Admin
 
@@ -164,7 +164,7 @@ Esse é o Unconstrained Delegation, temos acesso praticamente total ao servidor.
 
 A microsoft verificou que isso era muito perigoso (e com razão), ai implementou outro tipo de Delegation, a Constrained, que limita quais acessos o SPN vai ter na máquina.
 
-### Constrained Delegation
+# Constrained Delegation
 
 Bom, verificando que isso era perigoso deixar habilitado o Unconstrained, a Microsoft criou o Constrained Delegation, onde apenas alguns serviços são disponibilizados, não o  acesso à máquina como era no Unconstrained. Aqui no caso um usuário específico tera permissões diretas na máquinas.
 
@@ -184,7 +184,7 @@ Para verificarmos quais usuário estão com o Constrained Habilitado em quais M�
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/constrained1.png)
 
-#### Explorando o Constrained Delegation
+## Explorando o Constrained Delegation
 
 Uma vez que temos o constrained habilitado, e sabemos que o usuário `dbservice` nessa caso tem essas permissões, vamos iniciar a exploração.
 
