@@ -60,10 +60,10 @@ privilege::debug
 misc::skeleton
 ```
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/enc.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/esc.png)
 
 Pronto! Feito! Agora acessamos qualquer máquina desse domínio com a credencial `mimikatz`
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/enc1.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/esc1.png)
 
 É importante ressaltar que esse ataque só pode ser feito uma vez, então caso quando você tente fazer dê erro, pode ser que alguém já tenha realizado nele no domínio.
