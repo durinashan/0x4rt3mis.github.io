@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Prime 1"
-tags: [Linux,Easy]
+tags: [Linux,Easy,Kernel,BurpSuite,Wfuzz,Gobuster,4.10.0-28-generic,Wordpress]
 categories: VulnHub
 ---
 
@@ -268,3 +268,53 @@ Conseguimos logar com o saket
 Damos um **su saket** e entramos como saket agora
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/sak.png)
+
+Olhando no **sudo -l** verificamos que podemos executar outro comando como root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/sudo.png)
+
+Executamos e vemos o que é feito
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/sudo1.png)
+
+Possivelmente ele está procurando por um arquivo em **/tmp/challenge** e executando ele como root
+
+Então vamos criar esse arquivo com um simples /bin/bash e executar pra virar root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/sudo2.png)
+
+## Flags
+
+Agora pegamos as flags
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/user.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/root.png)
+
+# Algo a mais
+
+Também podemos pegar o root dessa máquina de outra máneira, através da exploração do kernel dela
+
+**4.10.0-28-generic**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/uname.png)
+
+Pesquisamos por exploit para essa versão então
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/kernel.png)
+
+**https://github.com/kkamagui/linux-kernel-exploits/tree/master/kernel-4.10.0-28-generic/CVE-2017-16995**
+
+Encontramos um que nos satisfaz
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/kernel1.png)
+
+Baixamos e passamos pra máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/kernel2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/kernel3.png)
+
+Compilamos executamos e viramos root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/kernel4.png)
