@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Prime 1"
-tags: [Linux,Easy,Kernel,BurpSuite,Wfuzz,Gobuster,4.10.0-28-generic,Wordpress]
+tags: [Linux,Easy,Kernel,BurpSuite,Wfuzz,Gobuster,4.10.0-28-generic,Wordpress,Linpeas]
 categories: VulnHub
 ---
 
@@ -136,8 +136,6 @@ follow_the_ippsec? Estranho, isso pode ser um senha de alguma coisa... vamos ten
 ## WordPress
 
 Vimos que não deu certo com o usuário saket
-
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp.png)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/wp1.png)
 
