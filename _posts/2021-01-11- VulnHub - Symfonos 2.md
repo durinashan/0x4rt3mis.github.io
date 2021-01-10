@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Symfonos 2"
-tags: [Linux,Medium,Gobuster,Smbclient,Enum4linux]
+tags: [Linux,Medium,Gobuster,Smbclient,Enum4linux,Chisel,PortForwading,ProFTPD 1.3.5, Hydra, Medusa, Socat, LibreNMS, MySQL, GTFOBINS, John]
 categories: VulnHub
 ---
 
@@ -49,7 +49,7 @@ Abrimos ela no navegador pra se tem algo de interessante
 Vamos rodar o gobuster também
 
 ```bash
-gobuster dir -u http://192.168.56.106/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x php -t 50
+gobuster dir -u http://192.168.56.106/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x php -t 30
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos2/web1.png)
@@ -240,7 +240,7 @@ Servidor e Cliente
 
 Página Web
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos2/chisel3.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos2/portssh1.png)
 
 Agora vamos prosseguir
 
@@ -292,7 +292,7 @@ E viramos root!
 
 Pegamos a flag!
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos2/libre8.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos2/flag.png)
 
 # Algo a Mais
 
