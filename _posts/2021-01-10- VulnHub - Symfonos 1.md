@@ -24,7 +24,7 @@ arp-scan -I eth1 192.168.56.100/24
 
 ### Explicação de cada parâmetro do Nmap
 
-> -sC --> Rodar alguns scripts padrão em cada porta (Não vou rodar essa flag pq teve uma saída bem bizarra)
+> -sC --> Rodar alguns scripts padrão em cada porta
 
 > -sV --> Levantar qual serviço está rodando na porta
 
@@ -115,7 +115,7 @@ wpscan --url http://192.168.56.105/h3l105 --enumerate u
 
 Beleza, enumeramos um usuário, mas nada que possamos fazer de exploração ainda
 
-Pô, aqui eu travei por um bom tempo, tive que dar uma olhada nos blogs da vida por ai pra achar uma solução, e encontrei no blog do (mzrf)[https://blog.mzfr.me/vulnhub-writeups/2019-07-04-symfonos]
+Pô, aqui eu travei por um bom tempo, tive que dar uma olhada nos blogs da vida por ai pra achar uma solução, e encontrei no blog do [mzrf](https://blog.mzfr.me/vulnhub-writeups/2019-07-04-symfonos)
 
 Adicinar o host `symfonos.local` no /etc/host e fazer um wpscan em cima dele
 
@@ -137,7 +137,7 @@ Como não temos conta ainda... esse LFI pareceu bem interessante
 
 **WordPress Plugin Mail Masta 1.0 - Local File Inclusion**
 
-(ExploitDB)[https://www.exploit-db.com/exploits/40290]
+[ExploitDB](https://www.exploit-db.com/exploits/40290)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos1/masta.png)
 
@@ -155,7 +155,7 @@ Beleza, temos um LFI, mas não temos muito oq fazer... por enquanto
 
 Isso mesmo, a gente vai fazer um Log Poison no SMTP através do LFI pra conseguirmos RCE
 
-(Referencia-LEIA)[https://www.hackingarticles.in/smtp-log-poisioning-through-lfi-to-remote-code-exceution/]
+[Referencia-LEIA](https://www.hackingarticles.in/smtp-log-poisioning-through-lfi-to-remote-code-exceution/)
 
 1º Devemos verificar se temos acesso à caixa de email do usuário
 
@@ -196,7 +196,7 @@ Agora pegamos uma Reverse Shell
 
 Bom, vamos iniciar a escalação de privilégio agora
 
-Como boa prática, vamos executar o (Linpeas)[https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS]
+Como boa prática, vamos executar o [Linpeas](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos1/lin.png)
 

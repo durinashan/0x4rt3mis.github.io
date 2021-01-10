@@ -24,7 +24,7 @@ arp-scan -I eth1 192.168.56.100/24
 
 ### Explicação de cada parâmetro do Nmap
 
-> -sC --> Rodar alguns scripts padrão em cada porta (Não vou rodar essa flag pq teve uma saída bem bizarra)
+> -sC --> Rodar alguns scripts padrão em cada porta
 
 > -sV --> Levantar qual serviço está rodando na porta
 
