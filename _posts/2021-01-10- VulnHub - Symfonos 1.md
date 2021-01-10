@@ -261,3 +261,13 @@ Atualizamos
 Recebemos o shell!
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos1/reverse2.png)
+
+## Banco de Dados
+
+Que tal darmos uma explorada nesse banco de dados que tem ali?
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos1/db.png)
+
+Aqui conseguimos o hash do usuário Admin, mas não temos mais muito o que fazer, por aqui fim da linha!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos1/db1.png)
