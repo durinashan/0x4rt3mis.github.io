@@ -6,7 +6,7 @@ categories: VulnHub
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/inicial.png)
 
-Link: <https://www.vulnhub.com/entry/symfonos-31,332/>
+Link: <https://www.vulnhub.com/entry/symfonos-4,347/>
 
 # Enumeração
 
@@ -82,7 +82,6 @@ O que é interessante é lembrar de adicionar o ../../../../../../../ antes do F
 
 ```bash
 wfuzz -c --hw 39 -b 'PHPSESSID=2vg4c4t2jlgs9l9eqn23dbptpi' -w '/usr/share/seclists/Fuzzing/LFI/LFI-Jhaddix.txt' -u 'http://192.168.56.108/sea.php?file=../../../../../../../FUZZ'
-
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/wfuzz.png)
@@ -166,7 +165,7 @@ Executamos e encontramos algo sendo executado na porta 8080
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/pspy2.png)
 
-Com o comando **ps -aux | grep 8080** confirmamos isso
+Com o comando **ps -aux \| grep 8080** confirmamos isso
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/pspy3.png)
 
@@ -283,7 +282,3 @@ Mandamos e viramos root!
 ## Pegamos a Flag
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/flag.png)
-
-
-
-
