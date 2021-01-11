@@ -251,7 +251,7 @@ Bom, pelo que vi ele faz um curl ai no localhost, tem alguma coisa de ftp (que e
 Então vamos capturar o tráfego
 
 ```bash
-tcpdump -w ftp.pcap -i enp0s3
+tcpdump -w ftp.pcap -i lo
 # -w -> O arquivo em que vai salvar tudão
 # -i lo -> Escutar a interface
 ```
