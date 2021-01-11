@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Symfonos 4"
-tags: [Linux,Medium]
+tags: [Linux, Medium, Serialization, Python, Pyckles, LFI, SSH Log Poison, Wfuzz, Gobuster, Find, Chisel, Socat, Port Forwading, BurpSuite]
 categories: VulnHub
 ---
 
@@ -280,10 +280,10 @@ Mandamos e viramos root!
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/burp3.png)
 
+## Pegamos a Flag
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/burp.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/flag.png)
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/burp.png)
 
 
 
